@@ -172,3 +172,114 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {});
     }
   }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!isBoxReady) {
+      return Scaffold(
+        appBar: AppBar(title: Text(widget.user.name)),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            CircleAvatar(child: Text(widget.user.avatar)),
+            SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.user.name,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Online',
+                  style: TextStyle(fontSize: 12, color: Colors.green),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ValueListenableBuilder(
+              valueListenable: box.listenable(),
+              builder: (context, Box<Message> box, _) {
+                final messages = box.values.toList();
+
+                return ListView.builder(
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final message = messages[index];
+                    return Align(
+                      alignment:
+                          message.isMe
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 8,
+                        ),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: message.isMe ? Colors.green : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child:
+                            message.type == 'text'
+                                ? Text(
+                                  message.content,
+                                  style: TextStyle(
+                                    color:
+                                        message.isMe
+                                            ? Colors.white
+                                            : Colors.black,
+                                  ),
+                                )
+                                : Image.file(
+                                  File(message.content),
+                                  width: 150,
+                                  height: 150,
+                                  fit: BoxFit.cover,
+                                ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: _sendImageMessage,
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: 'Message',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(icon: Icon(Icons.send), onPressed: _sendTextMessage),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

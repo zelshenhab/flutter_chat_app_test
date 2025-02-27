@@ -27,6 +27,8 @@ class Message extends HiveObject {
   });
 }
 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();

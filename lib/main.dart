@@ -115,3 +115,60 @@ class ChatUser {
     required this.chatBoxName,
   });
 }
+
+// Chat Screen
+class ChatScreen extends StatefulWidget {
+  final ChatUser user;
+
+  const ChatScreen({super.key, required this.user});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  late Box<Message> box;
+  final TextEditingController _controller = TextEditingController();
+  final picker = ImagePicker();
+  bool isBoxReady = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _openBox();
+  }
+
+  Future<void> _openBox() async {
+    box = await Hive.openBox<Message>(widget.user.chatBoxName);
+    setState(() {
+      isBoxReady = true;
+    });
+  }
+
+  Future<void> _sendTextMessage() async {
+    final text = _controller.text.trim();
+    if (text.isEmpty) return;
+    final message = Message(
+      content: text,
+      type: 'text',
+      timestamp: DateTime.now(),
+      isMe: true,
+    );
+    await box.add(message);
+    _controller.clear();
+    setState(() {}); // Update UI
+  }
+
+  Future<void> _sendImageMessage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final message = Message(
+        content: pickedFile.path,
+        type: 'image',
+        timestamp: DateTime.now(),
+        isMe: true,
+      );
+      await box.add(message);
+      setState(() {});
+    }
+  }

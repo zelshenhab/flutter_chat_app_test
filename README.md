@@ -1,16 +1,38 @@
-# flutter_work2
 
-A new Flutter project.
+# Flutter Chat App Test
 
-## Getting Started
+This is a simple Flutter chat application built for the hiring test. It uses:
+- Flutter + Hive for local storage.
+- ImagePicker for image messages.
+- Modern architecture with separation of concerns.
 
-This project is a starting point for a Flutter application.
+## How to Run
 
-A few resources to get you started if this is your first Flutter project:
+1. Clone the repository:
+```bash
+git clone https://github.com/zelshenhab/flutter-chat-app-test.git
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. Install dependencies:
+```bash
+flutter pub get
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. Run the project:
+```bash
+flutter run
+```
+
+## Folder Structure
+
+```
+lib/
+  adapters/        // Hive adapters
+  models/          // Data models
+  screens/         // UI screens
+  main.dart        // App entry point
+```
+
+## APK
+
+The compiled APK is available in [Releases](https://github.com/zelshenhab/flutter-chat-app-test/releases).
